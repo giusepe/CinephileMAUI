@@ -33,7 +33,16 @@ namespace Cinephile.Views
                 this.Bind(ViewModel, x => x.SelectedItem, x => x.UpcomingMoviesList.SelectedItem).DisposeWith(disposables);
                 this.OneWayBind(ViewModel, vm => vm.OpenAboutView, view => view.About.Command).DisposeWith(disposables);
 
-                
+
+                // Why ObservableEvents is sending a null here?
+                //UpcomingMoviesList
+                //    .Events()
+                //    .ItemAppearing
+                //    .Select((e) => e.Item as UpcomingMoviesCellViewModel)
+                //    .BindTo(this, x => x.ViewModel.ItemAppearing)
+                //    .DisposeWith(disposables);
+
+                // workaround until I figure out how to use ObservableEvents package
                 Observable.FromEventPattern<EventHandler<ItemVisibilityEventArgs>, ItemVisibilityEventArgs>
                 (ev => UpcomingMoviesList.ItemAppearing += ev, ev => UpcomingMoviesList.ItemAppearing -= ev)
                     .Select((e) => e.EventArgs.Item as UpcomingMoviesCellViewModel)
