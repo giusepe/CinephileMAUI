@@ -24,7 +24,7 @@ namespace Cinephile.ViewModels
         /// <param name="mainThreadScheduler">Gets the scheduler to use for the main thread.</param>
         /// <param name="taskPoolScheduler">Gets the scheduler to use for background operations.</param>
         /// <param name="hostScreen">The screen to use for routing.</param>
-        public MovieDetailViewModel(Movie movie, IScheduler mainThreadScheduler = null, IScheduler taskPoolScheduler = null, IScreen hostScreen = null)
+        public MovieDetailViewModel(Movie movie, IScheduler mainThreadScheduler, IScheduler taskPoolScheduler)
             : base(mainThreadScheduler, taskPoolScheduler)
         {
             _movie = movie;

@@ -22,9 +22,8 @@ namespace Cinephile.ViewModels
         /// <param name="taskPoolScheduler">The scheduler to use for scheduling on a background thread.</param>
         /// <param name="hostScreen">The main screen for routing.</param>
         public AboutViewModel(
-                IScheduler mainThreadScheduler = null,
-                IScheduler taskPoolScheduler = null,
-                IScreen hostScreen = null)
+                IScheduler mainThreadScheduler,
+                IScheduler taskPoolScheduler)
             : base(mainThreadScheduler, taskPoolScheduler)
         {
             ShowIconCredits = ReactiveCommand.CreateFromObservable<string, Unit>(url => OpenBrowser.Handle(url));

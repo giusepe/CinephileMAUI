@@ -18,7 +18,7 @@ public class MovieService : IMovieService
 
     private IApiService _apiService { get; }
 
-    public IObservableCache<Movie, string> UpcomingMovies => throw new NotImplementedException();
+    public IObservableCache<Movie, string> UpcomingMovies => _internalSourceCache;
 
     public IObservable<Unit> LoadUpcomingMovies(int index)
     {

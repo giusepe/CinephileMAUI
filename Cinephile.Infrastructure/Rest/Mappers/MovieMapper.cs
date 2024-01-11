@@ -9,7 +9,7 @@ namespace Cinephile.Infrastructure;
 /// </summary>
 public static class MovieMapper
 {
-    private const string BaseUrl = "http://image.tmdb.org/t/p/";
+    private const string BaseUrl = "https://image.tmdb.org/t/p/";
     private const string SmallPosterSize = "w185";
     private const string BigPosterSize = "w500";
 

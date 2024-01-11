@@ -35,33 +35,33 @@ public class UpcomingMoviesListViewModel : ViewModelBase
         IMovieService movieService1 = movieService;
 
         LoadMovies = ReactiveCommand.CreateFromObservable<int, Unit>(count => movieService1.LoadUpcomingMovies(count));
-        OpenAboutView = ReactiveCommand.CreateFromObservable<Unit, IRoutableViewModel>(_ => HostScreen
-                .Router
-                .Navigate
-                .Execute(new AboutViewModel(mainThreadScheduler, taskPoolScheduler)));
+        //OpenAboutView = ReactiveCommand.CreateFromObservable<Unit, IRoutableViewModel>(_ => HostScreen
+        //        .Router
+        //        .Navigate
+        //        .Execute(new AboutViewModel(mainThreadScheduler, taskPoolScheduler)));
 
         movieService1
             .UpcomingMovies
             .Connect()
             .SubscribeOn(TaskPoolScheduler)
             .ObserveOn(TaskPoolScheduler)
-            .Transform(movie => new UpcomingMoviesCellViewModel(movie))//, (o, n) => o = new UpcomingMoviesCellViewModel(n))
+            .Transform(movie => new UpcomingMoviesCellViewModel(movie, MainThreadScheduler, TaskPoolScheduler))//, (o, n) => o = new UpcomingMoviesCellViewModel(n))
             .DisposeMany()
             .ObserveOn(MainThreadScheduler)
             .Bind(out _movies)
             .Subscribe();
 
         LoadMovies.Subscribe();
-        OpenAboutView.Subscribe();
+        //OpenAboutView.Subscribe();
 
-        this
-            .WhenAnyValue(x => x.SelectedItem)
-            .Where(x => x != null)
-            .SelectMany(x => HostScreen
-                .Router
-                .Navigate
-                .Execute(new MovieDetailViewModel(x.Movie)))
-            .Subscribe();
+        //this
+        //    .WhenAnyValue(x => x.SelectedItem)
+        //    .Where(x => x != null)
+        //    .SelectMany(x => HostScreen
+        //        .Router
+        //        .Navigate
+        //        .Execute(new MovieDetailViewModel(x.Movie, MainThreadScheduler, TaskPoolScheduler)))
+        //    .Subscribe();
 
         LoadMovies
             .ThrownExceptions
@@ -70,10 +70,10 @@ public class UpcomingMoviesListViewModel : ViewModelBase
             .Subscribe();
 
         // TODO: Find out why ToProperty is at fault
-        //_isRefreshing =
-        //    LoadMovies
-        //        .IsExecuting
-        //        .ToProperty(this, x => x.IsRefreshing, true);
+        _isRefreshing =
+            LoadMovies
+                .IsExecuting
+                .ToProperty(this, x => x.IsRefreshing, true, MainThreadScheduler);
 
         this
             .WhenAnyValue(x => x.ItemAppearing)

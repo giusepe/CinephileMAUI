@@ -4,6 +4,7 @@
 // See the LICENSE file in the project root for full license information.
 
 using System.Globalization;
+using System.Reactive.Concurrency;
 using Cinephile.Core.Models;
 using ReactiveUI;
 
@@ -19,8 +20,8 @@ namespace Cinephile.ViewModels
         /// </summary>
         /// <param name="movie">The movie information.</param>
         /// <param name="hostScreen">The screen for routing operations.</param>
-        public UpcomingMoviesCellViewModel(Movie movie, IScreen hostScreen = null)
-            : base()
+        public UpcomingMoviesCellViewModel(Movie movie, IScheduler mainScheduler, IScheduler taskPoolScheduler)
+            : base(mainScheduler, taskPoolScheduler)
         {
             Movie = movie;
         }

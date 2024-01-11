@@ -7,6 +7,7 @@ using Cinephile.ViewModels;
 using ReactiveUI;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using ReactiveMarbles.ObservableEvents;
 
 namespace Cinephile.Views
 {
@@ -18,9 +19,11 @@ namespace Cinephile.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="UpcomingMoviesListView"/> class.
         /// </summary>
-        public UpcomingMoviesListView()
+        public UpcomingMoviesListView(UpcomingMoviesListViewModel viewModel)
         {
             InitializeComponent();
+
+            BindingContext = viewModel;
 
             this.WhenActivated(disposables =>
             {
@@ -30,10 +33,10 @@ namespace Cinephile.Views
                 this.Bind(ViewModel, x => x.SelectedItem, x => x.UpcomingMoviesList.SelectedItem).DisposeWith(disposables);
                 this.OneWayBind(ViewModel, vm => vm.OpenAboutView, view => view.About.Command).DisposeWith(disposables);
 
-                UpcomingMoviesList
-                    .Events()
-                    .ItemAppearing
-                    .Select((e) => e.Item as UpcomingMoviesCellViewModel)
+                
+                Observable.FromEventPattern<EventHandler<ItemVisibilityEventArgs>, ItemVisibilityEventArgs>
+                (ev => UpcomingMoviesList.ItemAppearing += ev, ev => UpcomingMoviesList.ItemAppearing -= ev)
+                    .Select((e) => e.EventArgs.Item as UpcomingMoviesCellViewModel)
                     .BindTo(this, x => x.ViewModel.ItemAppearing)
                     .DisposeWith(disposables);
             });

@@ -12,14 +12,14 @@ namespace Cinephile.ViewModels
     /// <summary>
     /// A base for all the different view models used throughout the application.
     /// </summary>
-    public abstract class ViewModelBase : ReactiveObject, IRoutableViewModel, IActivatableViewModel
+    public abstract class ViewModelBase : ReactiveObject, IActivatableViewModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
         /// </summary>
         /// <param name="mainThreadScheduler">The scheduler to use to schedule operations on the main thread.</param>
         /// <param name="taskPoolScheduler">The scheduler to use to schedule operations on the task pool.</param>
-        protected ViewModelBase(IScheduler mainThreadScheduler = null, IScheduler taskPoolScheduler = null)
+        protected ViewModelBase(IScheduler mainThreadScheduler, IScheduler taskPoolScheduler)
         {
             // Set the schedulers like this so we can inject the test scheduler later on when doing VM unit tests
             MainThreadScheduler = mainThreadScheduler ?? RxApp.MainThreadScheduler;
@@ -28,16 +28,6 @@ namespace Cinephile.ViewModels
             ShowAlert = new Interaction<AlertViewModel, Unit>(MainThreadScheduler);
             OpenBrowser = new Interaction<string, Unit>(MainThreadScheduler);
         }
-
-        /// <summary>
-        /// Gets the current page path.
-        /// </summary>
-        public string UrlPathSegment { get; }
-
-        /// <summary>
-        /// Gets the screen used for routing operations.
-        /// </summary>
-        public IScreen HostScreen { get; }
 
         /// <summary>
         /// Gets the activator which contains context information for use in activation of the view model.
