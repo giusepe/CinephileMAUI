@@ -3,11 +3,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-using Cinephile.ViewModels;
 using ReactiveUI;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using ReactiveMarbles.ObservableEvents;
+using Cinephile.ViewModels.ViewModels;
 
 namespace Cinephile.Views
 {
@@ -23,6 +23,7 @@ namespace Cinephile.Views
         {
             InitializeComponent();
 
+            //TODO: This needs to be automated somehow
             BindingContext = viewModel;
 
             this.WhenActivated(disposables =>
@@ -31,8 +32,6 @@ namespace Cinephile.Views
 
                 this.OneWayBind(ViewModel, x => x.Movies, x => x.UpcomingMoviesList.ItemsSource).DisposeWith(disposables);
                 this.Bind(ViewModel, x => x.SelectedItem, x => x.UpcomingMoviesList.SelectedItem).DisposeWith(disposables);
-                this.OneWayBind(ViewModel, vm => vm.OpenAboutView, view => view.About.Command).DisposeWith(disposables);
-
 
                 // Why ObservableEvents is sending a null here?
                 //UpcomingMoviesList

@@ -17,7 +17,7 @@ namespace Cinephile.Infrastructure.Framework.Scheduler
 
         public IScheduler ImmediateScheduler => Rx.ImmediateScheduler.Instance;
 
-        public IScheduler MainScheduler => Rx.ImmediateScheduler.Instance;
+        public IScheduler MainThreadScheduler => Rx.ImmediateScheduler.Instance;
 
         public IScheduler TaskPoolScheduler
         {

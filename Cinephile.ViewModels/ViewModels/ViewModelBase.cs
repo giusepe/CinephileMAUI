@@ -4,10 +4,10 @@
 // See the LICENSE file in the project root for full license information.
 
 using System.Reactive;
-using System.Reactive.Concurrency;
+using Cinephile.Infrastructure.Framework.Scheduler;
 using ReactiveUI;
 
-namespace Cinephile.ViewModels
+namespace Cinephile.ViewModels.ViewModels
 {
     /// <summary>
     /// A base for all the different view models used throughout the application.
@@ -17,16 +17,12 @@ namespace Cinephile.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
         /// </summary>
-        /// <param name="mainThreadScheduler">The scheduler to use to schedule operations on the main thread.</param>
-        /// <param name="taskPoolScheduler">The scheduler to use to schedule operations on the task pool.</param>
-        protected ViewModelBase(IScheduler mainThreadScheduler, IScheduler taskPoolScheduler)
+        protected ViewModelBase(ISchedulerService schedulerService)
         {
-            // Set the schedulers like this so we can inject the test scheduler later on when doing VM unit tests
-            MainThreadScheduler = mainThreadScheduler ?? RxApp.MainThreadScheduler;
-            TaskPoolScheduler = taskPoolScheduler ?? RxApp.TaskpoolScheduler;
+            SchedulerService = schedulerService;
 
-            ShowAlert = new Interaction<AlertViewModel, Unit>(MainThreadScheduler);
-            OpenBrowser = new Interaction<string, Unit>(MainThreadScheduler);
+            ShowAlert = new Interaction<AlertViewModel, Unit>(SchedulerService.MainThreadScheduler);
+            OpenBrowser = new Interaction<string, Unit>(SchedulerService.MainThreadScheduler);
         }
 
         /// <summary>
@@ -44,14 +40,6 @@ namespace Cinephile.ViewModels
         /// </summary>
         public Interaction<string, Unit> OpenBrowser { get; }
 
-        /// <summary>
-        /// Gets the scheduler for scheduling operations on the main thread.
-        /// </summary>
-        protected IScheduler MainThreadScheduler { get; }
-
-        /// <summary>
-        /// Gets the scheduler for scheduling operations on the task pool.
-        /// </summary>
-        protected IScheduler TaskPoolScheduler { get; }
+        protected ISchedulerService SchedulerService { get; }
     }
 }

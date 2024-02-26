@@ -17,6 +17,13 @@ public class RestApiService : IApiService
     }
     public int PageSize { get; } = 20;
 
+    public IObservable<Movie> FetchMovie(string id, string language)
+    {
+        return RestApi
+            .FetchMovie(id, language)
+            .Select(movieDto => MovieMapper.ToModel(movieDto));
+    }
+
     public IObservable<IEnumerable<Movie>> FetchUpcomingMovies(int index, string language)
     {
         int page = (int)Math.Ceiling(index / (double)PageSize) + 1;

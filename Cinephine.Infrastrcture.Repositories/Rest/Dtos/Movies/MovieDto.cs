@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Cinephile.Rest.Dtos.Movies
+namespace Cinephile.Infrastructure.Repositories.Rest.Dtos.Movies
 {
     /// <summary>
     /// Information about a movie.

@@ -6,9 +6,10 @@
 using System.Globalization;
 using System.Reactive.Concurrency;
 using Cinephile.Core.Models;
+using Cinephile.Infrastructure.Framework.Scheduler;
 using ReactiveUI;
 
-namespace Cinephile.ViewModels
+namespace Cinephile.ViewModels.ViewModels
 {
     /// <summary>
     /// A view model for a cell that contains a movie.
@@ -20,8 +21,8 @@ namespace Cinephile.ViewModels
         /// </summary>
         /// <param name="movie">The movie information.</param>
         /// <param name="hostScreen">The screen for routing operations.</param>
-        public UpcomingMoviesCellViewModel(Movie movie, IScheduler mainScheduler, IScheduler taskPoolScheduler)
-            : base(mainScheduler, taskPoolScheduler)
+        public UpcomingMoviesCellViewModel(ISchedulerService schedulerService, Movie movie)
+            : base(schedulerService)
         {
             Movie = movie;
         }

@@ -1,10 +1,12 @@
 ﻿using Cinephile.Core;
 using Cinephile.Core.Models;
-using Cinephile.Infrastructure;
-using Cinephile.ViewModels;
+using Cinephile.Infrastructure.Framework.Scheduler;
+using Cinephile.Infrastructure.Repositories;
+using Cinephile.Services;
+using Cinephile.ViewModels.Services;
+using Cinephile.ViewModels.ViewModels;
 using Cinephile.Views;
 using Microsoft.Extensions.Logging;
-using ReactiveUI;
 
 namespace Cinephile
 {
@@ -22,13 +24,15 @@ namespace Cinephile
                 })
                 .Services
                     .AddTransient<IApiService, RestApiService>()
-                    .AddTransient<IMovieService, MovieService>()
-                    .AddTransient(x => new UpcomingMoviesListViewModel(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, x.GetService<IMovieService>()))
+                    .AddSingleton<IMovieService, MovieService>() //TODO: Testing how this would work
+                    .AddTransient<INavigationService, NavigationService>()
+                    .AddSingleton<ISchedulerService, SchedulerService>()
+                    .AddTransient<UpcomingMoviesListViewModel>()
+                    .AddTransient<MovieDetailViewModel>()
                     .AddTransient<UpcomingMoviesListView>()
                     .AddTransient<UpcomingMoviesCellView>()
                     .AddTransient<UpcomingMoviesCellViewModel>()
-                    .AddTransient<MovieDetailView>()
-                    .AddTransient<MovieDetailViewModel>();
+                    .AddTransient<MovieDetailView>();
 
 #if DEBUG
     		builder.Logging.AddDebug();

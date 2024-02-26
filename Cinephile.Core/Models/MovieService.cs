@@ -1,4 +1,5 @@
-﻿using System.Reactive;
+﻿using System;
+using System.Reactive;
 using System.Reactive.Linq;
 using DynamicData;
 
@@ -29,5 +30,13 @@ public class MovieService : IMovieService
                 _internalSourceCache.Edit(innerCache => innerCache.AddOrUpdate(x));
                 return Unit.Default;
             });
+    }
+
+    public IObservable<Movie> GetMovie(string id)
+    {
+        return Observable.Return(_internalSourceCache.Lookup(id).Value);
+
+        //return _apiService
+        //    .FetchMovie(id, _language);
     }
 }

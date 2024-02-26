@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
-namespace Cinephile.Rest.Dtos.Movies
+namespace Cinephile.Infrastructure.Repositories.Rest.Dtos.Movies
 {
     /// <summary>
     /// A result about a movie.

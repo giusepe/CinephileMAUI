@@ -5,21 +5,28 @@
 
 using System;
 
-namespace Cinephile.Rest.Dtos.Movies
+namespace Cinephile.Infrastructure.Repositories.Rest.Dtos.Movies
 {
     /// <summary>
-    /// Gets information about movie dates.
+    /// A data transfer object containing genre information.
     /// </summary>
-    public class MovieDates
+    public class GenreDto
     {
         /// <summary>
-        /// Gets or sets the maximum movie date.
+        /// Gets or sets the ID of the genre.
         /// </summary>
-        public string Maximum { get; set; }
+        public int Id
+        {
+            get;
+            set;
+        }
 
         /// <summary>
-        /// Gets or sets the minimum movie date.
+        /// Gets or sets the name of the genre.
         /// </summary>
-        public string Minimum { get; set; }
+        public string Name
+        {
+            get; set;
+        }
     }
 }

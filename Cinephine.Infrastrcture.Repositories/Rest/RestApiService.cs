@@ -1,10 +1,9 @@
 ﻿using System.Reactive.Linq;
 using Cinephile.Core;
 using Cinephile.Core.Models;
-using Cinephile.Rest.Dtos.Movies;
 using Refit;
 
-namespace Cinephile.Infrastructure;
+namespace Cinephile.Infrastructure.Repositories;
 
 public class RestApiService : IApiService
 {
@@ -16,6 +15,14 @@ public class RestApiService : IApiService
         RestApi = RestService.For<IRestClientContract>("https://api.themoviedb.org/3");
     }
     public int PageSize { get; } = 20;
+
+    public IObservable<Movie> FetchMovie(string id, string language)
+    {
+        throw new NotImplementedException();
+        //return RestApi
+        //    .FetchMovie(ApiKey, id, language)
+        //    .Select(movieDto => MovieMapper.ToModel(movieDto));
+    }
 
     public IObservable<IEnumerable<Movie>> FetchUpcomingMovies(int index, string language)
     {

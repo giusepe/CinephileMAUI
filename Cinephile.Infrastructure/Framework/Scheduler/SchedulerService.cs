@@ -20,7 +20,7 @@ namespace Cinephile.Infrastructure.Framework.Scheduler
 
         public IScheduler ImmediateScheduler => Rx.ImmediateScheduler.Instance;
 
-        public IScheduler MainScheduler => m_mainScheduler;
+        public IScheduler MainThreadScheduler => m_mainScheduler;
 
         public IScheduler TaskPoolScheduler => Rx.TaskPoolScheduler.Default;
     }

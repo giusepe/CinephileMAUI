@@ -19,7 +19,7 @@ namespace Cinephile.Infrastructure.Framework.Scheduler
             get;
         }
 
-        IScheduler MainScheduler
+        IScheduler MainThreadScheduler
         {
             get;
         }

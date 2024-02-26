@@ -48,7 +48,7 @@ namespace Cinephile.Infrastructure.Framework.Scheduler
 
         public IScheduler ImmediateScheduler => this.immediateScheduler;
 
-        public IScheduler MainScheduler => this.mainScheduler;
+        public IScheduler MainThreadScheduler => this.mainScheduler;
 
         public IScheduler EventLoopScheduler => this.eventLoopScheduler;
 

@@ -6,9 +6,10 @@
 using System;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using Cinephile.Infrastructure.Framework.Scheduler;
 using ReactiveUI;
 
-namespace Cinephile.ViewModels
+namespace Cinephile.ViewModels.ViewModels
 {
     /// <summary>
     /// A view model which shows information about the application.
@@ -21,10 +22,8 @@ namespace Cinephile.ViewModels
         /// <param name="mainThreadScheduler">The scheduler to use for processing on the main UI thread.</param>
         /// <param name="taskPoolScheduler">The scheduler to use for scheduling on a background thread.</param>
         /// <param name="hostScreen">The main screen for routing.</param>
-        public AboutViewModel(
-                IScheduler mainThreadScheduler,
-                IScheduler taskPoolScheduler)
-            : base(mainThreadScheduler, taskPoolScheduler)
+        public AboutViewModel(ISchedulerService schedulerService)
+            : base(schedulerService)
         {
             ShowIconCredits = ReactiveCommand.CreateFromObservable<string, Unit>(url => OpenBrowser.Handle(url));
             ShowIconCredits.Subscribe();

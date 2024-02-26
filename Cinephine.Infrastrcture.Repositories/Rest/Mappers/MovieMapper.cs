@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using Cinephile.Core.Models;
-using Cinephile.Rest.Dtos.Movies;
+using Cinephile.Infrastructure.Repositories.Rest.Dtos.Movies;
 
-namespace Cinephile.Infrastructure;
+namespace Cinephile.Infrastructure.Repositories;
 
 /// <summary>
 /// Maps the data transfer objects (DTO) to Movie instances.

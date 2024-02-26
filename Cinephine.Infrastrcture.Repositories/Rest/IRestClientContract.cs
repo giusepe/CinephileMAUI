@@ -1,7 +1,7 @@
-﻿using Cinephile.Rest.Dtos.Movies;
+﻿using Cinephile.Infrastructure.Repositories.Rest.Dtos.Movies;
 using Refit;
 
-namespace Cinephile.Infrastructure;
+namespace Cinephile.Infrastructure.Repositories;
 
 [Headers("Content-Type: application/json")]
 public interface IRestClientContract
@@ -32,4 +32,7 @@ public interface IRestClientContract
     /// <returns>An observable which signals with the genre.</returns>
     [Get("/genre/movie/list?api_key={apiKey}&language={language}")]
     IObservable<GenresDto> FetchGenres(string apiKey, string language);
+
+    [Get("/movie/{movie_id}?api_key={apiKey}&language={language}")]
+    IObservable<GenresDto> FetchMovie(string apiKey, string movie_id, string language);
 }

@@ -6,8 +6,11 @@ using ReactiveUI;
 using DynamicData;
 using System.Reactive.Linq;
 using System.Collections.ObjectModel;
+using Cinephile.ViewModels.Services;
+using System.Diagnostics;
+using Cinephile.Infrastructure.Framework.Scheduler;
 
-namespace Cinephile.ViewModels;
+namespace Cinephile.ViewModels.ViewModels;
 
 /// <summary>
 /// A view model that contains a list of movies.
@@ -27,45 +30,44 @@ public class UpcomingMoviesListViewModel : ViewModelBase
     /// <param name="movieService">The service to use to retrieve movie information.</param>
     /// <param name="hostScreen">The screen to use for routing operations.</param>
     public UpcomingMoviesListViewModel(
-            IScheduler mainThreadScheduler,
-            IScheduler taskPoolScheduler,
+            ISchedulerService schedulerService,
+            INavigationService navigationService,
             IMovieService movieService)
-        : base(mainThreadScheduler, taskPoolScheduler)
+        : base(schedulerService)
     {
         IMovieService movieService1 = movieService;
 
         LoadMovies = ReactiveCommand.CreateFromObservable<int, Unit>(count => movieService1.LoadUpcomingMovies(count));
-        //OpenAboutView = ReactiveCommand.CreateFromObservable<Unit, IRoutableViewModel>(_ => HostScreen
-        //        .Router
-        //        .Navigate
-        //        .Execute(new AboutViewModel(mainThreadScheduler, taskPoolScheduler)));
 
         movieService1
             .UpcomingMovies
             .Connect()
-            .SubscribeOn(TaskPoolScheduler)
-            .ObserveOn(TaskPoolScheduler)
-            .Transform(movie => new UpcomingMoviesCellViewModel(movie, MainThreadScheduler, TaskPoolScheduler))//, (o, n) => o = new UpcomingMoviesCellViewModel(n))
+            .SubscribeOn(SchedulerService.TaskPoolScheduler)
+            .ObserveOn(SchedulerService.TaskPoolScheduler)
+            .Transform(movie => new UpcomingMoviesCellViewModel(SchedulerService, movie))//, (o, n) => o = new UpcomingMoviesCellViewModel(n))
             .DisposeMany()
-            .ObserveOn(MainThreadScheduler)
+            .ObserveOn(SchedulerService.MainThreadScheduler)
             .Bind(out _movies)
             .Subscribe();
 
         LoadMovies.Subscribe();
-        //OpenAboutView.Subscribe();
 
-        //this
-        //    .WhenAnyValue(x => x.SelectedItem)
-        //    .Where(x => x != null)
-        //    .SelectMany(x => HostScreen
-        //        .Router
-        //        .Navigate
-        //        .Execute(new MovieDetailViewModel(x.Movie, MainThreadScheduler, TaskPoolScheduler)))
-        //    .Subscribe();
+        this
+            .WhenAnyValue(x => x.SelectedItem)
+            .Where(x => x != null)
+            .Do(x => Debug.WriteLine($"Navigating {x.Movie.Id}"))
+            .SelectMany(x => navigationService.GoTo($"movies/detail?movieId={x.Movie.Id}")
+            
+            //HostScreen
+            //    .Router
+            //    .Navigate
+            //    .Execute(new MovieDetailViewModel(x.Movie, MainThreadScheduler, TaskPoolScheduler))
+                )
+            .Subscribe();
 
         LoadMovies
             .ThrownExceptions
-            .ObserveOn(MainThreadScheduler)
+            .ObserveOn(SchedulerService.MainThreadScheduler)
             .SelectMany(ex => ShowAlert.Handle(new AlertViewModel("Oops", ex.Message, "Ok")))
             .Subscribe();
 
@@ -73,7 +75,7 @@ public class UpcomingMoviesListViewModel : ViewModelBase
         _isRefreshing =
             LoadMovies
                 .IsExecuting
-                .ToProperty(this, x => x.IsRefreshing, true, MainThreadScheduler);
+                .ToProperty(this, x => x.IsRefreshing, true, SchedulerService.MainThreadScheduler);
 
         this
             .WhenAnyValue(x => x.ItemAppearing)

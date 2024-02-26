@@ -7,9 +7,18 @@
     Title="Cinephile"
     Shell.FlyoutBehavior="Disabled">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate views:UpcomingMoviesListView}"
-        Route="MainPage" />
-
+    <TabBar>
+        <Tab Icon="home.png">
+            <ShellContent
+                Title="Home"
+                ContentTemplate="{DataTemplate views:UpcomingMoviesListView}"
+                Route="MainPage" />
+        </Tab>
+        <Tab Icon="settings.png">
+            <ShellContent
+                Title="About"
+                ContentTemplate="{DataTemplate views:AboutView}"
+                Route="About" />
+        </Tab>
+    </TabBar>
 </Shell>

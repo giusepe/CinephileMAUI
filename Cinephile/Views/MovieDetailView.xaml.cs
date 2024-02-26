@@ -3,9 +3,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
+using System.Diagnostics;
 using System.Reactive.Disposables;
-using Cinephile.ViewModels;
-using Cinephile.Views;
+using System.Web;
+using Cinephile.ViewModels.ViewModels;
 using ReactiveUI;
 
 namespace Cinephile.Views
@@ -13,14 +14,17 @@ namespace Cinephile.Views
     /// <summary>
     /// A page which contains details about a movie.
     /// </summary>
-    public partial class MovieDetailView : ContentPageBase<MovieDetailViewModel>
+    public partial class MovieDetailView : ContentPageBase<MovieDetailViewModel>, IQueryAttributable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MovieDetailView"/> class.
         /// </summary>
-        public MovieDetailView()
+        public MovieDetailView(MovieDetailViewModel viewModel)
         {
             InitializeComponent();
+
+            //TODO: This needs to be automated somehow
+            BindingContext = viewModel;
 
             this.WhenActivated(disposables =>
             {
@@ -29,6 +33,12 @@ namespace Cinephile.Views
                 this.OneWayBind(ViewModel, x => x.ReleaseDate, x => x.ReleaseDate.Text, x => x).DisposeWith(disposables);
                 this.OneWayBind(ViewModel, x => x.Overview, x => x.Overview.Text, x => x).DisposeWith(disposables);
             });
+        }
+
+        public void ApplyQueryAttributes(IDictionary<string, object> query)
+        {
+            ViewModel.MovieId = query["movieId"].ToString();
+            Debug.WriteLine($"View Recived {ViewModel.MovieId}");
         }
     }
 }
