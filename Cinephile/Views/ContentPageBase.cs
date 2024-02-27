@@ -23,6 +23,8 @@ namespace Cinephile.Views
         /// </summary>
         public ContentPageBase()
         {
+            BindingContext = ViewModel;
+
             this.WhenActivated(disposables =>
             {
                 ViewModel

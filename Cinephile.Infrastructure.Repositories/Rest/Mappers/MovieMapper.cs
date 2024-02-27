@@ -2,7 +2,7 @@
 using Cinephile.Core.Models;
 using Cinephile.Infrastructure.Repositories.Rest.Dtos.Movies;
 
-namespace Cinephile.Infrastructure;
+namespace Cinephile.Infrastructure.Repositories;
 
 /// <summary>
 /// Maps the data transfer objects (DTO) to Movie instances.
@@ -22,11 +22,6 @@ public static class MovieMapper
     /// <returns>The mapped Movie instance.</returns>
     public static Movie ToModel(GenresDto genres, MovieResult movieDto, string language)
     {
-        Console.WriteLine(string
-                .Concat(
-                    BaseUrl,
-                    SmallPosterSize,
-                    movieDto.PosterPath));
         return new Movie
         {
             Id = movieDto.Id.ToString(),

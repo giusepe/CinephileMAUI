@@ -1,10 +1,9 @@
 ﻿using System.Reactive.Linq;
 using Cinephile.Core;
 using Cinephile.Core.Models;
-using Cinephile.Infrastructure.Repositories.Rest.Dtos.Movies;
 using Refit;
 
-namespace Cinephile.Infrastructure;
+namespace Cinephile.Infrastructure.Repositories;
 
 public class RestApiService : IApiService
 {
@@ -19,9 +18,10 @@ public class RestApiService : IApiService
 
     public IObservable<Movie> FetchMovie(string id, string language)
     {
-        return RestApi
-            .FetchMovie(id, language)
-            .Select(movieDto => MovieMapper.ToModel(movieDto));
+        throw new NotImplementedException();
+        //return RestApi
+        //    .FetchMovie(ApiKey, id, language)
+        //    .Select(movieDto => MovieMapper.ToModel(movieDto));
     }
 
     public IObservable<IEnumerable<Movie>> FetchUpcomingMovies(int index, string language)

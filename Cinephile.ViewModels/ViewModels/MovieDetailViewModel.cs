@@ -3,9 +3,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-using System.Diagnostics;
 using System.Globalization;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Cinephile.Core.Models;
 using Cinephile.Infrastructure.Framework.Scheduler;
@@ -18,9 +16,8 @@ namespace Cinephile.ViewModels.ViewModels
     /// </summary>
     public class MovieDetailViewModel : ViewModelBase
     {
-        private readonly ObservableAsPropertyHelper<Movie> _movie;
-
-        public Movie Movie => _movie.Value;
+        private string _movieId;
+        private Movie _movie;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MovieDetailViewModel"/> class.
@@ -29,11 +26,10 @@ namespace Cinephile.ViewModels.ViewModels
             : base(schedulerService)
         {
             this.WhenAnyValue(x => x.MovieId)
-                .Do(x => Console.WriteLine($"Value: {x}"))
                 .WhereNotNull()
-                .Select(id => movieService.GetMovie(id))
+                .Select(movieService.GetMovie)
                 .Switch()
-                .ToProperty(this, nameof(Movie), out _movie, scheduler: SchedulerService.MainThreadScheduler);
+                .Subscribe(x => Movie = x);
         }
 
         /// <summary>
@@ -66,6 +62,16 @@ namespace Cinephile.ViewModels.ViewModels
         /// </summary>
         public string Overview => Movie?.Overview;
 
-        public string MovieId { get; set; }//  => _movieId.Value;
+        public string MovieId
+        {
+            get { return _movieId; }
+            set { this.RaiseAndSetIfChanged(ref _movieId, value); }
+        }
+
+        public Movie Movie
+        {
+            get { return _movie; }
+            set { this.RaiseAndSetIfChanged(ref _movie, value); }
+        }
     }
 }

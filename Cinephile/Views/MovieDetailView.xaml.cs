@@ -3,9 +3,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-using System.Diagnostics;
 using System.Reactive.Disposables;
-using System.Web;
 using Cinephile.ViewModels.ViewModels;
 using ReactiveUI;
 
@@ -23,7 +21,6 @@ namespace Cinephile.Views
         {
             InitializeComponent();
 
-            //TODO: This needs to be automated somehow
             BindingContext = viewModel;
 
             this.WhenActivated(disposables =>
@@ -37,8 +34,11 @@ namespace Cinephile.Views
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            ViewModel.MovieId = query["movieId"].ToString();
-            Debug.WriteLine($"View Recived {ViewModel.MovieId}");
+            if (ViewModel is not null)
+            {
+                ViewModel.MovieId = query["movieId"]?.ToString()
+                    ?? throw new ArgumentNullException("movieId");
+            }
         }
     }
 }

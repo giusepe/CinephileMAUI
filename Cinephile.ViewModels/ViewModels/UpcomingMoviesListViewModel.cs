@@ -1,13 +1,10 @@
-﻿using System;
-using System.Reactive;
-using System.Reactive.Concurrency;
+﻿using System.Reactive;
 using Cinephile.Core.Models;
 using ReactiveUI;
 using DynamicData;
 using System.Reactive.Linq;
 using System.Collections.ObjectModel;
 using Cinephile.ViewModels.Services;
-using System.Diagnostics;
 using Cinephile.Infrastructure.Framework.Scheduler;
 
 namespace Cinephile.ViewModels.ViewModels;
@@ -37,7 +34,7 @@ public class UpcomingMoviesListViewModel : ViewModelBase
     {
         IMovieService movieService1 = movieService;
 
-        LoadMovies = ReactiveCommand.CreateFromObservable<int, Unit>(count => movieService1.LoadUpcomingMovies(count));
+        LoadMovies = ReactiveCommand.CreateFromObservable<int, Unit>(movieService1.LoadUpcomingMovies);
 
         movieService1
             .UpcomingMovies
@@ -55,14 +52,7 @@ public class UpcomingMoviesListViewModel : ViewModelBase
         this
             .WhenAnyValue(x => x.SelectedItem)
             .Where(x => x != null)
-            .Do(x => Debug.WriteLine($"Navigating {x.Movie.Id}"))
-            .SelectMany(x => navigationService.GoTo($"movies/detail?movieId={x.Movie.Id}")
-            
-            //HostScreen
-            //    .Router
-            //    .Navigate
-            //    .Execute(new MovieDetailViewModel(x.Movie, MainThreadScheduler, TaskPoolScheduler))
-                )
+            .SelectMany(x => navigationService.GoTo($"movies/detail?movieId={x.Movie.Id}"))
             .Subscribe();
 
         LoadMovies

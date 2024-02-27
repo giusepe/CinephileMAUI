@@ -2,6 +2,19 @@
 
 public class Movie : IEquatable<Movie>
 {
+    public Movie(string id, string title, string overview, string posterSmall, string posterLarge, DateTime releaseDate, IList<string> genres)
+    {
+        Id = id;
+        Title = title;
+        Overview = overview;
+        PosterSmall = posterSmall;
+        PosterLarge = posterLarge;
+        ReleaseDate = releaseDate;
+        Genres = genres;
+    }
+
+    public Movie() { }
+
     public string Id { get; set; }
     public string Title { get; set; }
     public string Overview { get; set; }
